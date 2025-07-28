@@ -19,6 +19,7 @@ public class InputReader : ScriptableObject, IPlayerActions, IInputReader
     public UnityAction<bool> Jump = delegate { };
     public UnityAction<bool> Attack = delegate { };
     public UnityAction<bool> Interact = delegate { };
+    public UnityAction<bool> Mirror = delegate { };
     public UnityAction<bool> Crouch = delegate { };
     public UnityAction<bool> Previous = delegate { };
     public UnityAction<bool> Next = delegate { };
@@ -73,10 +74,10 @@ public class InputReader : ScriptableObject, IPlayerActions, IInputReader
          switch (context.phase)
          {
              case InputActionPhase.Started:
-                 Attack.Invoke(true);
+                 Interact.Invoke(true);
                  break;
              case InputActionPhase.Canceled:
-                 Attack.Invoke(false);
+                 Interact.Invoke(false);
                  break;
              
          }
@@ -147,6 +148,20 @@ public class InputReader : ScriptableObject, IPlayerActions, IInputReader
                  break;
              case InputActionPhase.Canceled:
                  Sprint.Invoke(false);
+                 break;
+             
+         }
+     }
+
+     public void OnMirror(InputAction.CallbackContext context)
+     {
+         switch (context.phase)
+         {
+             case InputActionPhase.Started:
+                 Mirror.Invoke(true);
+                 break;
+             case InputActionPhase.Canceled:
+                 Mirror.Invoke(false);
                  break;
              
          }
