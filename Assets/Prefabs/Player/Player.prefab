@@ -149,7 +149,7 @@ MonoBehaviour:
   gravity: 30
   airFriction: 0.5
   groundFriction: 100
-  jumpSpeed: 15
+  jumpSpeed: 20
   jumpDuration: 1
 --- !u!95 &2820771166422932629
 Animator:
