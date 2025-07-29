@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
         
         momentum = horizontalMomentum + verticalMomentum;
         
-        if((jumpKeyIsPressed || jumpKeyWasPressed) && !jumpInputIsLocked)
+        if((jumpKeyIsPressed || jumpKeyWasPressed) && !jumpInputIsLocked && isGrounded)
             HandleJumping();
     }
     
