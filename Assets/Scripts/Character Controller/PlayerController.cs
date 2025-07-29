@@ -77,11 +77,6 @@ public class PlayerController : MonoBehaviour
         velocity += momentum;
         rb.linearVelocity = velocity;
         savedVelocity = velocity;
-        if (Math.Abs(velocity.x) > 0.1f)
-        {
-            float targetAngle = velocity.x > 0 ? 0f : 180f;
-            transform.localRotation = Quaternion.Euler(0, targetAngle, 0);
-        }
         
         ResetJumpKeys();
 
