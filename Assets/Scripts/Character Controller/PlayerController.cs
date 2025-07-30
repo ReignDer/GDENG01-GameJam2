@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     RaycastSensor sensor;
     CapsuleCollider col;
     
+    CeilingDetector ceilingDetector;
+    
     bool isGrounded;
     float baseSensorRange;
     Vector3 currentGroundAdjustmentVelocity;
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         tr = transform;
         col = GetComponent<CapsuleCollider>();
+        ceilingDetector = GetComponent<CeilingDetector>();
         inputReader.EnablePlayerInput();
         rb.useGravity = false;
         RecalibrateSensor();
@@ -73,12 +76,16 @@ public class PlayerController : MonoBehaviour
     {
         CheckForGround();
         HandleGravity();
+        if(ceilingDetector.HitCeiling())
+            OnFallStart();
         velocity = CalculateVelocity();
         velocity += momentum;
         rb.linearVelocity = velocity;
         savedVelocity = velocity;
         
         ResetJumpKeys();
+        
+        if(ceilingDetector != null) ceilingDetector.Reset();
 
     }
     private void HandleJumping()
@@ -115,6 +122,11 @@ public class PlayerController : MonoBehaviour
             HandleJumping();
     }
     
+    public void OnFallStart() {
+        var currentUpMomemtum = VectorMath.ExtractDotVector(momentum, tr.up);
+        momentum = VectorMath.RemoveDotVector(momentum, tr.up);
+        momentum -= tr.up * currentUpMomemtum.magnitude;
+    }
 
     public Vector3 GetMovementVelocity() => savedVelocity;
     private Vector3 CalculateVelocity() => CalculateDirection() * movementSpeed;
