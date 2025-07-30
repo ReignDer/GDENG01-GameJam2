@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     int currentLayer;
     bool isUsingExtendedSensorRange = true;
     private float stepHeightRatio = 0.01f;
+    private bool wasGroundedLastFrame = false;
     
     public event Action<Vector3> OnJump = delegate { };
     public event Action<Vector3> OnLand = delegate { };
@@ -81,6 +82,7 @@ public class PlayerController : MonoBehaviour
     {
         CheckForGround();
         HandleGravity();
+        
         if(ceilingDetector.HitCeiling())
             OnFallStart();
         velocity = CalculateVelocity();
@@ -101,7 +103,11 @@ public class PlayerController : MonoBehaviour
         jumpInputIsLocked = true;
         OnJump.Invoke(momentum);
     }
-    
+    public void OnGroundContactRegained()
+    {
+        Vector3 collisionVelocity = momentum;
+        OnLand.Invoke(collisionVelocity);
+    }
     public void ResetJumpKeys()
     {
         jumpKeyWasReleased = false;
@@ -182,6 +188,8 @@ public class PlayerController : MonoBehaviour
             RecalculateSensorLayerMask();
         }
         
+        bool previouslyGrounded = isGrounded;
+        
         currentGroundAdjustmentVelocity = Vector3.zero;
         sensor.castLength = isUsingExtendedSensorRange ? 
             baseSensorRange + col.height * tr.localScale.x * stepHeightRatio 
@@ -189,6 +197,11 @@ public class PlayerController : MonoBehaviour
         sensor.Cast();
         
         isGrounded = sensor.HasDetectedHit();
+        
+        if (!previouslyGrounded && isGrounded)
+        {
+            OnGroundContactRegained();
+        }
         //Debug.Log(sensor.GetCollider().name);
         if (!isGrounded) return;
         

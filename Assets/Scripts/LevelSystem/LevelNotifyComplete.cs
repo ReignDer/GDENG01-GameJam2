@@ -7,6 +7,7 @@ public class LevelNotifyComplete : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject door;
     [SerializeField] private GameObject UI;
+    [SerializeField] private ChangeTintLensFlare  changeTintLensFlare;
 
     private void Start()
     {
@@ -32,5 +33,6 @@ public class LevelNotifyComplete : MonoBehaviour, IInteractable
     {
         var rotateObject = door.GetComponent<RotateObject>();
         rotateObject.Rotate();
+        changeTintLensFlare.ChangeTint(Color.green);
     }
 }
