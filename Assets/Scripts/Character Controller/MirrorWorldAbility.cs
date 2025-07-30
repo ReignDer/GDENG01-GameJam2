@@ -63,5 +63,10 @@ public class MirrorWorldAbility : MonoBehaviour
         else if (SkyboxInstance.HasProperty(SKYTINT_PROPERTY))
             SkyboxInstance.SetColor(SKYTINT_PROPERTY, tintColor);
     }
+
+    void OnDestroy()
+    {
+        inputReader.Mirror -= SwitchWorld;
+    }
     
 }

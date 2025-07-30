@@ -20,6 +20,7 @@ public class InputReader : ScriptableObject, IPlayerActions, IInputReader
     public UnityAction<bool> Attack = delegate { };
     public UnityAction<bool> Interact = delegate { };
     public UnityAction<bool> Mirror = delegate { };
+    public UnityAction<bool> Escape = delegate { };
     public UnityAction<bool> Crouch = delegate { };
     public UnityAction<bool> Previous = delegate { };
     public UnityAction<bool> Next = delegate { };
@@ -162,6 +163,20 @@ public class InputReader : ScriptableObject, IPlayerActions, IInputReader
                  break;
              case InputActionPhase.Canceled:
                  Mirror.Invoke(false);
+                 break;
+             
+         }
+     }
+
+     public void OnPause(InputAction.CallbackContext context)
+     {
+         switch (context.phase)
+         {
+             case InputActionPhase.Started:
+                 Escape.Invoke(true);
+                 break;
+             case InputActionPhase.Canceled:
+                 Escape.Invoke(false);
                  break;
              
          }

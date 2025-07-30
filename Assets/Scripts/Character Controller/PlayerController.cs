@@ -54,6 +54,11 @@ public class PlayerController : MonoBehaviour
         inputReader.Jump += HandleJump;
     }
 
+    private void OnDestroy()
+    {
+        inputReader.Jump -= HandleJump;
+    }
+
     private void HandleJump(bool isKeyPressed)
     {
         if (!jumpKeyIsPressed && isKeyPressed)
